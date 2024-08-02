@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lets-Try</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #282c34;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        #data {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .color-0 { color: #e06c75; }
+        .color-1 { color: #e5c07b; }
+        .color-2 { color: #98c379; }
+        .color-3 { color: #56b6c2; }
+        .color-4 { color: #61afef; }
+        .color-5 { color: #c678dd; }
+        .color-6 { color: #d19a66; }
+    </style>
+</head>
+<body>
+    <div id="data">Loading data...</div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/data');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                displayData(data);
+            } catch (error) {
+                document.getElementById('data').textContent = 'Failed to load data.';
+                console.error('Fetch error:', error);
+            }
+        }
+
+        function displayData(data) {
+            const jsonString = JSON.stringify(data, null, 2);
+            const dataContainer = document.getElementById('data');
+            dataContainer.innerHTML = '';
+
+            jsonString.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.className = `color-${index % 7}`; // Cycle through 7 colors
+                dataContainer.appendChild(span);
+            });
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
